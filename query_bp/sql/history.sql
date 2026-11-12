@@ -1,0 +1,1 @@
+select date_of_conv,prev_bal,new_bal,s_id from history where conv_id = %s

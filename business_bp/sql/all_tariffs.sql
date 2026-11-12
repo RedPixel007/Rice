@@ -1,0 +1,1 @@
+select tp_id, plan_name, cost_p_minute_day, cost_p_minute_night,min_volume, max_volume, step_volume, have_unlimit, have_stepped_volume from tariff_plans

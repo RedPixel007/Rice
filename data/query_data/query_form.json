@@ -1,0 +1,61 @@
+{
+  "client": {
+          "query_name": "Поиск Клиента по Сегменту",
+          "query_field": [
+                      {
+                        "name": "segment",
+                        "text": "Введите сегмент клиентов",
+                        "help_text": "adult",
+                        "type": "text"
+                      }
+                      ]
+  },
+  "history":
+        {
+          "query_name": "Поиск звонков по ID разговора",
+          "query_field": [
+                              {
+                                "name": "ID",
+                                "text": "Введите ID разговора",
+                                "help_text": "3",
+                                "type": "int"
+                              }
+                         ]
+        },
+  "sub-cl":
+        {
+          "query_name": "Поиск Клиента и его номеров по ID",
+          "query_field": [
+                              {
+                                "name": "ID",
+                                "text": "Введите ID клиента",
+                                "help_text": "4",
+                                "type": "int"
+                              }
+                         ]
+        },
+  "c_repl_time":
+        {
+          "query_name": "Поиск пополнений Клиента",
+          "query_field": [
+                              {
+                                "name": "b_month",
+                                "text": "Введите первый месяц",
+                                "help_text": "04",
+                                "type": "text"
+                              },
+                              {
+                                "name": "u_month",
+                                "text": "Введите вторый месяц",
+                                "help_text": "07",
+                                "type": "text"
+                              },
+                              {
+                                "name": "ID",
+                                "text": "Введите ID клиента",
+                                "help_text": "5",
+                                "type": "int"
+                              }
+                         ]
+        }
+}

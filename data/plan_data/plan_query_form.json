@@ -1,0 +1,12 @@
+{
+  "segment_plans": {
+          "query_field": [
+                      {
+                        "name": "segment",
+                        "text": "Введите сегмент клиентов",
+                        "help_text": "adult",
+                        "type": "text"
+                      }
+                      ]
+  }
+}

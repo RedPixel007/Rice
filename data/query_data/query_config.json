@@ -1,0 +1,23 @@
+{
+  "client": {
+          "sql": "client.sql",
+          "title": "Клиент",
+          "group": ["admin","worker"]
+  },
+
+  "history": {
+          "sql": "history.sql",
+          "title": "История звонков",
+          "group": "admin"
+  },
+  "sub-cl": {
+          "sql": "sub-cl.sql",
+          "title": "Абоненты",
+          "group": "admin"
+  },
+  "c_repl_time": {
+          "sql": "c_repl_time.sql",
+          "title": "Пополнения",
+          "group": "worker"
+  }
+}

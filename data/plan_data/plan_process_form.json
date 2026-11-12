@@ -1,0 +1,50 @@
+{
+  "plan_name": {
+    "name": "Имя тарифа",
+    "title": "Введите имя тарифа",
+    "placeholder": "Имя",
+    "type": "text"
+  },
+  "cost_p_minute_day": {
+    "name": "Стоимость звонка днём",
+    "title": "Введите плату за звонки днём /м",
+    "placeholder": "5",
+    "type": "text"
+  },
+  "cost_p_minute_night": {
+    "name": "Стоимость звонка ночью",
+    "title": "Введите плату за звонки ночью /м",
+    "placeholder": "3",
+    "type": "text"
+  },
+  "min_volume": {
+    "name": "Минимальный интернет",
+    "title": "Введите минимальный объём интернета ",
+    "placeholder": "0",
+    "type": "text"
+  },
+  "max_volume": {
+    "name": "Максимальный интернет",
+    "title": "Введите максимальный объём интернета ",
+    "placeholder": "100",
+    "type": "text"
+  },
+  "step_volume": {
+    "name": "Шаг интернета",
+    "title": "Введите шаг объёма интернета ",
+    "placeholder": "10",
+    "type": "text"
+  },
+  "have_unlimit": {
+    "name": "Безлимит",
+    "title": "Есть безлимит?",
+    "type": "bool",
+    "value": "Нет"
+  },
+  "have_stepped_volume": {
+    "name": "Выбор объёма",
+    "title": "Есть выбор объёма?",
+    "type": "bool",
+    "value": "Нет"
+  }
+}

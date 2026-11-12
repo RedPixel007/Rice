@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<input type="hidden" name="query_id" value="{{ query_id }}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Оператор сотовой связи</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class = "user_name">{{ user_name }}</div>
+    <center>
+        <h2>{{ query_name }}</h2>
+        <form method="post" action="">
+            {% for field in query %}
+                <div class="form-group">
+                    <label for="{{ field['name'] }}">
+                        {{ field['text'] }}
+                    </label>
+
+                    <input
+                        type="{{ field.get('type', 'text') }}"
+                        name="{{ field['name'] }}"
+                        id="{{ field['name'] }}"
+                        placeholder="{{ field.get('help_text', '') }}"
+                    >
+                    <br><br>
+                </div>
+            {% endfor %}
+            <br>
+            <input type="submit" class="button" value="Отправить запрос">
+        </form>
+        <br><br><br>
+        <a href="{{ url_for('query_bp.query_menu_handler') }}" class = "btn">Вернуться к запросам</a>
+    </center>
+</body>
+</html>

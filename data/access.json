@@ -1,0 +1,5 @@
+{
+  "admin": ["query_bp", "plan_bp"],
+  "worker": ["query_bp"],
+  "marketolog": ["plan_bp"]
+}

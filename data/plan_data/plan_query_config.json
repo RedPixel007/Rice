@@ -1,0 +1,28 @@
+{
+  "all_plans": {
+    "name": "Все тарифные планы",
+    "Title": "Все тарифы",
+    "sql": "all_tariffs.sql",
+    "need_form": "False",
+    "group": ["admin","marketolog"]
+  },
+  "usage_tariffs": {
+    "name": "Использование тарифов",
+    "Title": "Используемые тарифы",
+    "sql": "usage_tariffs.sql",
+    "need_form": "False",
+    "group": ["admin","marketolog"]
+  },
+  "segment_plans": {
+    "name": "Планы по сегменту",
+    "Title": "Тарифы по сегменту",
+    "sql": "segment_tariffs.sql",
+    "need_form": "True",
+    "group": ["admin","marketolog"]
+  },
+  "new_plan": {
+    "name": "Создать новый план",
+    "Title": "Новый тариф",
+    "group": ["admin","marketolog"]
+  }
+}

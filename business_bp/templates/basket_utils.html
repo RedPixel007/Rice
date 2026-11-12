@@ -1,0 +1,95 @@
+{% macro render_item(plan, key, switch_basket, basket) %}
+
+<div style="border-style: solid; border-color: black; margin: 1px; border-width: 1px;">
+    {% if plan[key]["type"] != "bool" and
+        (((key == "min_volume" or key == "step_volume") and
+            ("have_stepped_volume" in basket and basket["have_stepped_volume"] == "Да")) or
+                (key != "min_volume" and key != "step_volume")) %}
+    <p>
+        <span>{{ plan[key]["name"] }} </span>
+    </p>
+    <div>
+        <form action="" method="post">
+            {% if switch_basket and key in basket %}
+                <div class="form-group">
+                    <p>:  {{ basket[key] }}</p>
+                    <label for="remove">
+                        {{ basket[key] }}
+                    </label>
+
+                    <input
+                        type= hidden
+                        name="{{ key }}"
+                        id="remove"
+                    >
+                    <input
+                        type= submit
+                        class = "button"
+                        name = "remove"
+                        value = "Очистить параметр"
+                    >
+                </div>
+            {% elif switch_basket == False %}
+                <div class="form-group">
+                    <label for="{{ key }}">
+                        {{ plan[key]['title'] }}
+                    </label>
+
+                    <input
+                        type= text
+                        name="{{ key }}"
+                        id="{{ key }}"
+                        placeholder="{{ plan[key]['placeholder'] }}"
+                    >
+                    <input
+                        type= submit
+                        class = "button"
+                        value = "Добавить параметр"
+                    >
+                    <br><br>
+                </div>
+            {% endif %}
+
+        </form>
+    </div>
+    {% endif %}
+    {% if plan[key]["type"] == "bool" %}
+    <div>
+        {% if switch_basket and key in basket %}
+            <p>
+                {{ plan[key]["name"] }}: {{ basket[key] }}
+            </p>
+            <label for="{{ key }}">
+                {{ basket[key] }}
+            </label>
+
+            <input
+                type= hidden
+                name="{{ key }}"
+                id="{{ key }}"
+            >
+            <input
+                type= submit
+                class = "button"
+                name = "remove"
+                value = "Очистить параметр"
+            >
+        {% elif switch_basket == False %}
+            <p>
+                {{ plan[key]["name"] }}:
+            </p>
+            <form action="" method="post">
+                <input type="hidden" name="{{ key }}" value="Нет">
+                {% if key not in basket or (key in basket and basket[key] == 'Нет') %}
+                    <input type="checkbox" name="{{ key }}" value="Да" onchange="this.form.requestSubmit()">
+                {% else%}
+                    <input type="checkbox" name="{{ key }}" value="Нет" onchange="this.form.requestSubmit()" checked>
+                {% endif %}
+        {% endif %}}
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endmacro %}

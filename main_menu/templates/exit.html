@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exit</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <center>
+        <h2>Вы вышли из системы!</h2>
+        <br><br><br>
+        <a href="{{ url_for('auth_bp.auth_index') }}" class = "btn">Войти в систему</a>
+    </center>
+</body>
+</html>

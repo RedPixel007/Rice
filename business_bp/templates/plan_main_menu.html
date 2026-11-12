@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tariff Plans</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class = "user_name">{{ user_name }}</div>
+    <center>
+    <h2>Меню тарифных планов</h2>
+        {% for key in keys %}
+            {% if key == "new_plan" %}
+                <a href="{{ url_for('plan_bp.new_plan', query_id = key) }}" class = "btn"> {{ dict[key]["name"] }} </a>
+            {% else %}
+                <a href="{{ url_for('plan_bp.query_handler', query_id = key) }}" class = "btn"> {{ dict[key]["name"] }} </a>
+            {% endif %}
+                <br><br>
+        {% endfor %}
+        <br><br>
+        <a href="{{ url_for('main_menu') }}" class = "back_btn">Вернуться в главное меню</a>
+    </center>
+</body>
+</html>
