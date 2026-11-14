@@ -8,13 +8,6 @@
 </head>
 <body>
 <div class = "user_name">{{ user_name }}</div>
-<div align="center">
-    <br><br>
-    <a>Создать тариф</a>
-    <br><br>
-    <a href = "{{ url_for('plan_bp.clear_basket') }}" class = "btn">Очистить варианты</a>
-</div>
-
 {% import 'basket_utils.html' as utils %}
 <div class="container">
     <div class="row">
@@ -29,9 +22,21 @@
                 {% for key in plan.keys() %}
                     {{ utils.render_item(plan, key, True, basket) }}
                 {% endfor %}
+                <div align="center">
+                    {% if basket_full == 'True' %}
+                        <br><br>
+                        <a href = "{{ url_for('plan_bp.create_plan') }}" class = "btn">Создать тариф</a>
+                    {% endif %}
+                    <br><br>
+                    <a href = "{{ url_for('plan_bp.clear_basket') }}" class = "btn">Очистить варианты</a>
+                </div>
         </div>
     </div>
 </div>
-
+<br><br>
+<center>
+    <a href="{{ url_for('plan_bp.tariff_page') }}" class = "back_btn">Вернуться к меню тарифов</a>
+</center>
+<br><br>
 </body>
 </html>

@@ -3,12 +3,16 @@ from database.sql_provider import SQLProvider
 from os import path
 from database.select import select_list, select_dict
 from query_bp.config import PLAN_QUERY, PLAN_RESULT, PLAN_FORM, PLAN_PROCESS
-from business_bp.model_route import model_route
+from business_bp.model_route import model_route_sel, model_route_ins
 
 from access import login_required, group_required
 
 blueprint_plan = Blueprint('plan_bp', __name__, template_folder='templates')
 provider = SQLProvider(path.join(path.dirname(__file__), 'sql'))
+basket_def = {
+    "have_unlimit": "Нет",
+    "have_stepped_volume": "Нет"
+             }
 
 
 @blueprint_plan.route('/', methods=['GET'])
@@ -32,7 +36,7 @@ def query_handler():
         query_field = PLAN_FORM[query_id]["query_field"]
         return render_template('plan_query.html', query_name=title, query=query_field, user_name = session['user_group'])
     else:
-        response = model_route(provider, query_info, {})
+        response = model_route_sel(provider, query_info, {})
         column_name = PLAN_RESULT[query_id]['column']
         print("Ответ:",response)
         return render_template("plan_dynamic.html", html_title=title , answer=response.result, column = column_name, user_name = session['user_group'])
@@ -42,7 +46,6 @@ def query_handler():
 @login_required
 @group_required
 def query_executor():
-    print("Suda")
     query_id = request.args.get('query_id')
 
     query_info = PLAN_QUERY[query_id]
@@ -50,7 +53,7 @@ def query_executor():
     column_name = PLAN_RESULT[query_id]['column']
 
     params = dict(request.form)
-    response = model_route(provider, query_info, params)
+    response = model_route_sel(provider, query_info, params)
 
     if response.status:
         return render_template("plan_dynamic.html", html_title=title , answer=response.result, column = column_name, user_name = session['user_group'])
@@ -62,57 +65,85 @@ def query_executor():
 @group_required
 def new_plan():
     if request.method == 'GET':
-        print(PLAN_PROCESS)
-        return render_template("basket_order_list.html", user_name = session['user_group'], plan = PLAN_PROCESS, basket = {})
+        session['basket_full'] = session.get('basket_full', 'False')
+        print(session["basket_full"])
+        print(list(PLAN_PROCESS.keys()))
+        print(list(session["basket"].keys()))
+        return render_template("basket_order_list.html",user_name = session['user_group'], plan = PLAN_PROCESS,
+                               basket = session["basket"], keys = list(PLAN_PROCESS.keys()), basket_full = session["basket_full"])
     else:
         info = dict(request.form)
         key = list(info.keys())[0]
 
-        print("prev del",session['basket'])
+        session['basket_full'] = session.get('basket_full', "False")
 
-        if "remove" in info:
+        if "remove" in info and key in session["basket"]:
+            session['basket_full'] = "False"
             del session["basket"][key]
-            return render_template("basket_order_list.html", user_name=session['user_group'], plan=PLAN_PROCESS,basket=session["basket"])
-
-        print("after del",session['basket'])
-
-        print("info",info)
+            return render_template("basket_order_list.html", user_name=session['user_group'], plan=PLAN_PROCESS,
+                                   basket=session["basket"], keys=list(PLAN_PROCESS.keys()), basket_full = session["basket_full"])
 
         if PLAN_PROCESS[key]["type"] == "bool":
             info[key] = request.form.getlist(key)[-1]
-            print("info key", info[key], info)
             session['basket'][key] = info[key]
-            print("update",session['basket'])
 
-        session['basket'] = session.get('basket', {})
+        session['basket'] = session.get('basket', basket_def)
         session['basket'][key] = info[key]
         session.permanent = True
+        print("Перед If")
 
-        print("До рендера", session['basket'])
+        for key in list(PLAN_PROCESS.keys()):
+            print("for")
+            if key not in session["basket"]:
+                if (key == 'min_volume' or key == 'step_volume') and session["basket"]["have_stepped_volume"] == "Нет":
+                    continue
+                session['basket_full'] = "False"
+                print("No", key, session["basket"])
+                break
+            session['basket_full'] = "True"
 
-        return render_template("basket_order_list.html",user_name = session['user_group'], plan = PLAN_PROCESS, basket = session["basket"])
-
-def add_to_basket(item, prod_id):
-    current_basket = session.get('basket', {})
-    if prod_id in current_basket:
-        current_basket[prod_id]['amount'] += 1
-    else:
-        current_basket[prod_id] = {
-            'prod_name': item['prod_name'],
-            'prod_price': item['prod_price'],
-            'amount': 1
-        }
-        session['basket'] = current_basket
-        session.permanent = True
-    return True
+        print(session['basket_full'])
+        print(list(PLAN_PROCESS.keys()))
+        print(list(session['basket'].keys()))
+        print(session["basket"])
+        return render_template("basket_order_list.html",user_name = session['user_group'], plan = PLAN_PROCESS, basket = session["basket"], basket_full = session['basket_full'] )
 
 
 @blueprint_plan.route('/new/clear', methods=['GET'])
 @login_required
 @group_required
 def clear_basket():
-    session['basket'] = {}
-    PLAN_PROCESS["have_unlimit"]["value"] = "Нет"
-    PLAN_PROCESS["have_stepped_volume"]["value"] = "Нет"
-    print("Clear",session['basket'])
+    session['basket'] = basket_def
+    del session['basket_full']
     return redirect(url_for("plan_bp.new_plan"))
+
+
+
+@blueprint_plan.route('/new/create', methods=['GET'])
+@login_required
+@group_required
+def create_plan():
+    params = []
+    if session["basket"]["have_stepped_volume"] == "Нет":
+        session["basket"]["min_volume"] = session["basket"]["max_volume"]
+        session["basket"]["step_volume"] = '0'
+    for key in list(PLAN_PROCESS.keys()):
+        params.append(session["basket"][key])
+
+    query_info = PLAN_QUERY["new_plan"]
+    title = query_info["Title"]
+
+    column_name = PLAN_RESULT["new_plan"]["column"]
+
+    response = model_route_ins(provider, query_info, params)
+
+    result = model_route_sel(provider, query_info, {"1":response.result[0]})
+
+    print(result)
+
+    if result.status:
+        session["basket"] = basket_def
+        del session["basket_full"]
+        return render_template("plan_dynamic.html", html_title=title , answer=result.result, column = column_name, user_name = session['user_group'])
+    else:
+        return f'Что-то пошло не так, {response.err_message}'
