@@ -25,6 +25,6 @@
     "Title": "Новый тариф",
     "sql_insert": "create_plan.sql",
     "sql": "created_plan_info.sql",
-    "group": ["admin","marketolog"]
+    "group": ["marketolog"]
   }
 }

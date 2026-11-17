@@ -10,12 +10,14 @@
     <center>
     <h2>Меню тарифных планов</h2>
         {% for key in keys %}
-            {% if key == "new_plan" %}
-                <a href="{{ url_for('plan_bp.new_plan', query_id = key) }}" class = "btn"> {{ dict[key]["name"] }} </a>
-            {% else %}
-                <a href="{{ url_for('plan_bp.query_handler', query_id = key) }}" class = "btn"> {{ dict[key]["name"] }} </a>
+            {% if user_name in dict[key]['group'] %}
+                {% if key == "new_plan" %}
+                    <a href="{{ url_for('plan_bp.new_plan', query_id = key) }}" class = "btn"> {{ dict[key]["name"] }} </a>
+                {% else %}
+                    <a href="{{ url_for('plan_bp.query_handler', query_id = key) }}" class = "btn"> {{ dict[key]["name"] }} </a>
+                {% endif %}
+                    <br><br>
             {% endif %}
-                <br><br>
         {% endfor %}
         <br><br>
         <a href="{{ url_for('main_menu') }}" class = "back_btn">Вернуться в главное меню</a>

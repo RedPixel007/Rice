@@ -2,23 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Новый тарифный план</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
+<center><h2>Создание тарифного плана</h2></center>
 <div class = "user_name">{{ user_name }}</div>
 {% import 'basket_utils.html' as utils %}
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <h2>Все товары</h2>
+            <h2>Каталог параметров</h2>
                 {% for key in plan.keys() %}
                     {{ utils.render_item(plan, key, False, basket) }}
                 {% endfor %}
         </div>
         <div class="col-md-4">
-            <h2>Корзина</h2>
+            <h2>Текущая конфигурация</h2>
                 {% for key in plan.keys() %}
                     {{ utils.render_item(plan, key, True, basket) }}
                 {% endfor %}

@@ -1,21 +1,17 @@
 {% macro render_item(plan, key, switch_basket, basket) %}
 
-<div style="border-style: solid; border-color: black; margin: 1px; border-width: 1px;">
+<div>
     {% if plan[key]["type"] != "bool" and
         (((key == "min_volume" or key == "step_volume") and
             ("have_stepped_volume" in basket and basket["have_stepped_volume"] == "Да")) or
                 (key != "min_volume" and key != "step_volume")) %}
-    <p>
-        <span>{{ plan[key]["name"] }} </span>
-    </p>
-    <div>
+        <div>
         <form action="" method="post">
             {% if switch_basket and key in basket %}
-                <div class="form-group">
-                    <p>:  {{ basket[key] }}</p>
-                    <label for="remove">
-                        {{ basket[key] }}
-                    </label>
+                <div class="plan_div">
+                    <p>
+                        <span>{{ plan[key]["name"] }}: {{ basket[key] }} </span>
+                    </p>
 
                     <input
                         type= hidden
@@ -30,7 +26,11 @@
                     >
                 </div>
             {% elif switch_basket == False %}
-                <div class="form-group">
+                <div class="plan_div">
+                    <p>
+                        <span>{{ plan[key]["name"] }} </span>
+                    </p>
+
                     <label for="{{ key }}">
                         {{ plan[key]['title'] }}
                     </label>
@@ -54,7 +54,7 @@
     </div>
     {% endif %}
     {% if plan[key]["type"] == "bool" %}
-    <div>
+    <div class="plan_div">
             <p>
                 {{ plan[key]["name"] }}:
             </p>

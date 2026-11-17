@@ -66,46 +66,36 @@ def query_executor():
 def new_plan():
     if request.method == 'GET':
         session['basket_full'] = session.get('basket_full', 'False')
-        print(session["basket_full"])
-        print(list(PLAN_PROCESS.keys()))
-        print(list(session["basket"].keys()))
+        session['basket'] = session.get('basket', basket_def)
+        session.permanent = True
         return render_template("basket_order_list.html",user_name = session['user_group'], plan = PLAN_PROCESS,
                                basket = session["basket"], keys = list(PLAN_PROCESS.keys()), basket_full = session["basket_full"])
-    else:
+    elif request.method == 'POST':
         info = dict(request.form)
         key = list(info.keys())[0]
 
-        session['basket_full'] = session.get('basket_full', "False")
-
         if "remove" in info and key in session["basket"]:
             session['basket_full'] = "False"
+            print(session["basket"])
             del session["basket"][key]
-            return render_template("basket_order_list.html", user_name=session['user_group'], plan=PLAN_PROCESS,
-                                   basket=session["basket"], keys=list(PLAN_PROCESS.keys()), basket_full = session["basket_full"])
+            print(session["basket"])
+            session.permanent = True
+            return redirect(url_for("plan_bp.new_plan"))
 
         if PLAN_PROCESS[key]["type"] == "bool":
             info[key] = request.form.getlist(key)[-1]
             session['basket'][key] = info[key]
 
-        session['basket'] = session.get('basket', basket_def)
         session['basket'][key] = info[key]
-        session.permanent = True
-        print("Перед If")
 
         for key in list(PLAN_PROCESS.keys()):
-            print("for")
             if key not in session["basket"]:
                 if (key == 'min_volume' or key == 'step_volume') and session["basket"]["have_stepped_volume"] == "Нет":
                     continue
                 session['basket_full'] = "False"
-                print("No", key, session["basket"])
                 break
             session['basket_full'] = "True"
 
-        print(session['basket_full'])
-        print(list(PLAN_PROCESS.keys()))
-        print(list(session['basket'].keys()))
-        print(session["basket"])
         return render_template("basket_order_list.html",user_name = session['user_group'], plan = PLAN_PROCESS, basket = session["basket"], basket_full = session['basket_full'] )
 
 
@@ -139,7 +129,6 @@ def create_plan():
 
     result = model_route_sel(provider, query_info, {"1":response.result[0]})
 
-    print(result)
 
     if result.status:
         session["basket"] = basket_def

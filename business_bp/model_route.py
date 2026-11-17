@@ -11,7 +11,6 @@ class ResultInfo:
 
 def model_route_sel(provider,query_info, params):
     filename = query_info.get("sql")
-    print("model plan" + filename)
     if filename is None:
         return ResultInfo(
             result=None,
@@ -40,7 +39,6 @@ def model_route_ins(provider,query_info, params):
 
     result = insert_sql(q, params)
 
-    print("result:",result[0])
     err_message = ''
 
     if result:
